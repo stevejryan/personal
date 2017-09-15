@@ -1,6 +1,11 @@
 % financePlot.m
 
-T = readtable( '.\transactions (2).csv' );
+% T = readtable( '.\transactions (2).csv' );
+clear
+% clc
+close all
+cd( 'C:\Users\Mondegreen\Documents\GitHub\personal' )
+T = readtable( '.\transactions (3).csv' );
 begin = datetime( 2016, 1, 1 );
 T = T(datetime( T{:,1} )>begin,:);
 
@@ -30,11 +35,17 @@ for week = 1:numWeeks
 end
 
 figure(1)
-plot( E(1:end-1), eatingOutContainer, 'bo-' )
+f1 = plot( E(1:end-1), eatingOutContainer, 'bo-' );
+a1 = gca;
+hold on
+p1 = patch( [515 515 616 616], ...
+            [1 max( a1.YLim )-1 max( a1.YLim )-1 1], [0.8 0.8 0.8] );
+p1.EdgeAlpha = 0;
+a1.Children = flipud( a1.Children );
 title('Eating Out by Week')
-figure(2)
+f2 = figure(2);
 plot( E(1:end-1), groceriesContainer, 'bo-' )
 title('Grocery Purchases by Week')
-figure(3)
-plot( E(1:end-1), everythingContainer, 'bo-' )
+f3 = figure(3);
+plot( E(1:end-1), everythingContainer, 'bo-' );
 title( 'all expenses' )
