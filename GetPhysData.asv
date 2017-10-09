@@ -1,0 +1,7 @@
+% GetPhysData.m
+% At this point in the homework I feel like things would be easier with a
+% dedicated function for pulling up the physiology data, making any of the
+% necessary changes, and returning it.
+
+[physDat
+  
