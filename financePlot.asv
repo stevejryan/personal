@@ -14,14 +14,7 @@ T.Labels = [];
 T.Notes = [];
 T.OriginalDescription = [];
 
-brokerageAccount = readtable( '.\vanguardBrokerage.csv' );
-transactionSign = zeros( height( brokerageAccount ), 1 );
-transactionSign(strcmp( brokerageAccount.TransactionType, 'debit' ) ) = -1;
-transactionSign(strcmp( brokerageAccount.TransactionType, 'credit' ) ) = 1;
-brokerageAccount.TransactionSign = transactionSign;
-brokerageAccount.Amount = cell2mat( cellfun( @(x) str2num( x ), brokerageAccount.Amount, 'UniformOutput', false ) );
-brokerageAccount.Amount = brokerageAccount.Amount .* brokerageAccount.TransactionSign;
-
+% brokerageAccount = readtable( '.\vanguardBrokerage.csv' );
 % fourOhOneKay = readtable( '.\vanguard401k.csv' );
 % T = vertcat( T, brokerageAccount, fourOhOneKay );
 begin = datetime( 2016, 1, 3 );
@@ -75,7 +68,7 @@ iTID.Totals = splitapply( @sum, Tcredit.Amount, G );
 
 [G, tTID] = findgroups( T(:, 'Week') );
 signedAmount = T.Amount .* T.TransactionSign;
-tTID.Totals = splitapply( @sum, signedAmount, G );
+tTID.Totals = splitapply( @sum, T.Amount, G );
 
 %% Plotting
 
@@ -135,7 +128,6 @@ a3.Children = flipud( a3.Children );
 % a3.XTickLabelRotation = 45;
 a3.XAxis.MinorTick = 'on';
 a3.XAxis.MinorTickValues = minorTicks;
-ytickformat( a3, 'usd' )
 title( 'all expenses' )
 
 f4 = figure(4);
@@ -149,6 +141,3 @@ f5 = figure(5);
 f5.Color = [1 1 1];
 a5 = gca;
 plot( tTID.Week, cumsum( tTID.Totals ), 'b-' )
-hold( a5, 'on' )
-zero = plot( [begin, datetime( 'yesterday' )], [0 0], 'r:' );
-zero.LineWidth = 2;
