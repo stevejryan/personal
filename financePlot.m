@@ -14,16 +14,14 @@ T.Labels = [];
 T.Notes = [];
 T.OriginalDescription = [];
 
-brokerageAccount = readtable( '.\vanguardBrokerage.csv' );
-transactionSign = zeros( height( brokerageAccount ), 1 );
-transactionSign(strcmp( brokerageAccount.TransactionType, 'debit' ) ) = -1;
-transactionSign(strcmp( brokerageAccount.TransactionType, 'credit' ) ) = 1;
-brokerageAccount.TransactionSign = transactionSign;
-brokerageAccount.Amount = cell2mat( cellfun( @(x) str2num( x ), brokerageAccount.Amount, 'UniformOutput', false ) );
-brokerageAccount.Amount = brokerageAccount.Amount .* brokerageAccount.TransactionSign;
+brokerTable = readtable( '.\brokerage.csv' );
+brokerTable.AccountNumber = [];
+brokerTable.SettlementDate = [];
+brokerTable.Symbol = [];
 
-% fourOhOneKay = readtable( '.\vanguard401k.csv' );
-% T = vertcat( T, brokerageAccount, fourOhOneKay );
+
+retireTable = readtable( '.\fourOhOne.csv' );
+
 begin = datetime( 2016, 1, 3 );
 T.Date = datetime( T.Date );
 T = T(T.Date>begin,:);
